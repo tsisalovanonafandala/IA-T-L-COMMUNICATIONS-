@@ -183,10 +183,6 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
       <svg class="empty-icon" width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1"/></svg>
       <p>Posez votre question</p>
       <div class="chips">
-        <button class="chip">Qu est-ce que le multiplexage</button>
-        <button class="chip">Modulation AM vs FM</button>
-        <button class="chip">Heritage en Java POO</button>
-        <button class="chip">Protocole TCP IP</button>
       </div>
     </div>
   </div>
@@ -253,8 +249,8 @@ function getCurrentKey(){ return GROQ_KEYS[keyIndex]; }
 function rotateKey(){ keyIndex = (keyIndex + 1) % GROQ_KEYS.length; }
 
 const SYSTEM_PROMPTS = {
-  cours: `Tu es un expert universitaire en Telecommunications et Informatique.
-Tu reponds a toutes les questions concernant :
+  cours: `Tu es un expert en toute domaines.
+Tu reponds a toutes les questions:
 Telecommunications, Reseaux, Transmission analogique et numerique,
 Fibre optique, GSM 3G 4G 5G, Antennes, TCP/IP, Routage, Cisco, Linux,
 Cybersecurite, Programmation (C C++ Java Python JavaScript PHP),
@@ -276,7 +272,7 @@ IMPORTANT POUR LES MATHEMATIQUES :
 Reponds toujours en francais comme un professeur universitaire.
 Donne des explications detaillees avec exemples et formules LaTeX.`,
 
-  revision: `Tu es un professeur en Telecommunications et Informatique.
+  revision: `Tu es un professeur en toute domaines.
 Pour chaque reponse :
 1. Explique le concept clairement.
 2. Donne un exemple avec formules LaTeX si mathematique.
@@ -387,10 +383,6 @@ function startNewChat(){
     </svg>
     <p>Posez votre question</p>
     <div class="chips">
-      <button class="chip">Qu est-ce que le multiplexage</button>
-      <button class="chip">Modulation AM vs FM</button>
-      <button class="chip">Heritage en Java POO</button>
-      <button class="chip">Protocole TCP IP</button>
     </div>
   </div>`;
   emptyEl = document.getElementById("empty");
