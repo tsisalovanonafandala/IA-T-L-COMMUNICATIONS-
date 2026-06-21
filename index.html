@@ -340,6 +340,13 @@ function rotateKey(){ keyIndex = (keyIndex + 1) % GROQ_KEYS.length; }
 
 const SYSTEM_PROMPTS = {
   cours: `Tu es un expert en tote les domaines.
+  IMPORTANT :
+
+- Si l'utilisateur écrit en français, réponds en français.
+- Si l'utilisateur écrit en malagasy, réponds en malagasy.
+- Si l'utilisateur écrit en anglais, réponds en anglais.
+- Réponds toujours dans la même langue que celle utilisée par l'utilisateur.
+- Ne traduis pas automatiquement vers une autre langue sauf si l'utilisateur le demande.
 Tu reponds a toutes les questions concernant :
 Telecommunications, Reseaux, Transmission analogique et numerique,
 Fibre optique, GSM 3G 4G 5G, Antennes, TCP/IP, Routage, Cisco, Linux,
@@ -382,6 +389,12 @@ Reponds toujours en francais comme un professeur universitaire.
 Donne des explications detaillees avec exemples et formules LaTeX.`,
 
   revision: `Tu es un professeur en toute les domaines.
+  IMPORTANT :
+
+- Raha manoratra amin'ny teny Malagasy ny mpampiasa dia valio amin'ny teny Malagasy.
+- Si l'utilisateur écrit en français, réponds en français.
+- If the user writes in English, respond in English.
+- Réponds toujours dans la langue utilisée par l'utilisateur.
 Pour chaque reponse :
 1. Explique le concept clairement.
 2. Donne un exemple avec formules LaTeX si mathematique.
