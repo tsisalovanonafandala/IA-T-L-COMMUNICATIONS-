@@ -829,6 +829,7 @@ IMPORTANT POUR LES LIENS :
   [Chercher sur Google](https://www.google.com/search?q=mots+cles+pertinents)
 - N'utilise jamais d'URL d'exemple ou fictive comme "https://url-reelle.com" — ce n'est pas un vrai domaine. Chaque lien fourni doit etre soit un lien Google Search bien forme avec des mots-cles pertinents, soit un domaine racine que tu connais avec certitude (https://fr.wikipedia.org, https://developer.mozilla.org...) sans inventer le chemin exact de la page si tu n'es pas sur a 100%.
 - Si des resultats de recherche web reels sont fournis dans le contexte de la conversation, tu peux citer les liens reels qu'ils contiennent.
+- Tu ne dois pas te baser uniquement sur tes connaissances internes figees : quand des resultats de recherche web sont fournis dans le contexte, utilise-les systematiquement pour verifier, completer et renforcer ta reponse, meme si tu es deja sur de la reponse — les informations recentes du web prevalent sur tes connaissances internes si elles divergent.
 
 GENERATION DE CODE WEB (HTML + CSS + JS) :
 - Si l'utilisateur demande de creer un site, une page web, une application web, un jeu, un outil interactif ou un composant visuel, genere TOUT dans UN SEUL bloc de code \`\`\`html : le CSS dans une balise <style> et le JavaScript dans une balise <script>, tout dans le meme fichier HTML complet (avec <!DOCTYPE html>, <html>, <head>, <body>) — comme ce fichier que nous etudions actuellement.
@@ -1446,17 +1447,32 @@ async function extractLinksContent(text){
 
 /* ── Recherche Web (Jina AI Search — gratuit, sans clé) ── */
 const SEARCH_TRIGGERS = [
-  /qui est\s+/i, /c'est quoi\s+/i, /qu'est[- ]ce que\s+/i,
+  // Identité / définitions / explications générales
+  /qui est\s+/i, /qui [ée]tait\s+/i, /c'est quoi\s+/i, /qu'est[- ]ce que\s+/i,
+  /quel(le)?s?\s+(est|sont)\s+/i, /d[ée]finition\s+(de|du|d')/i,
+  /explique(-moi)?\s+/i, /explication\s+(de|du|d')/i,
+  /comment\s+(fonctionne|marche|ca\s+marche|fonctionnent)/i,
+  /pourquoi\s+/i, /diff[ée]rence\s+entre/i, /avantages?\s+(et\s+)?(inconv[ée]nients?)?\s*(de|du|d')/i,
+  /histoire\s+(de|du|d')/i, /r[oô]le\s+(de|du|d')/i, /exemple(s)?\s+(de|d')\s+/i,
+  // Recherche explicite
   /cherche\s+(sur|dans|via)?\s*(google|internet|web|en ligne)/i,
-  /recherche\s+/i, /trouve[- ]moi\s+/i, /infos? sur\s+/i,
+  /recherche\s+/i, /trouve[- ]moi\s+/i, /infos?\s+sur\s+/i, /renseigne(-moi)?\s+sur/i,
+  // Actualité / temporel / prix
   /actualit[eé]/i, /aujourd'?hui\s+/i, /derni[eè]re?s?\s+nouvelles/i,
   /prix\s+(de|du|d')/i, /combien\s+co[uû]te/i,
   /quand\s+est[- ]ce que/i, /comment\s+(s'appelle|est)\s+/i,
   /\b(2024|2025|2026)\b/
 ];
 
+// Messages trop courts ou purement calculatoires (equations, code, reponses de quiz) : pas besoin de recherche
+function isPureComputationRequest(text){
+  return /^[\d\s+\-*/^=().,xXyY]{1,30}$/.test(text.trim()) // calcul/equation nu
+      || /^\d+[a-dA-D](\s+\d+[a-dA-D])*$/.test(text.trim()); // reponses de quiz type "1A 2C 3B"
+}
+
 function needsWebSearch(text){
   if (/https?:\/\//.test(text)) return false; // lien deja fourni
+  if (isPureComputationRequest(text)) return false;
   return SEARCH_TRIGGERS.some(r => r.test(text));
 }
 
@@ -3752,7 +3768,7 @@ async function sendMessage(text){
     searchIndicator = showSearchIndicator();
     const searchResults = await webSearch(content);
     if (searchResults){
-      apiContent += `\n\n[RÉSULTATS DE RECHERCHE WEB pour "${content}"]:\n${searchResults}\n\nUtilise ces informations pour répondre à la question. Cite les sources si pertinent.`;
+      apiContent += `\n\n[RÉSULTATS DE RECHERCHE WEB pour "${content}"]:\n${searchResults}\n\nUtilise ces informations pour vérifier, compléter et renforcer ta réponse — même si tu penses déjà connaître la réponse, recoupe-la avec ces résultats récents avant de répondre. En cas de désaccord entre tes connaissances et ces résultats, privilégie l'information la plus récente et la plus fiable. Cite les sources si pertinent, sans pour autant copier de longs extraits.`;
     }
     searchIndicator.remove();
     searchIndicator = null;
